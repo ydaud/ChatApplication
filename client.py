@@ -2,7 +2,7 @@ import socket
 import threading
 import logging
 
-from defines import *
+from defines import ADDR, HEADER, DISCONNECT_MESSAGE, FORMAT
 
 
 class Client:
@@ -10,7 +10,6 @@ class Client:
     def __init__(self, client_name):
         logging.basicConfig(filename='logs/client.log', level=logging.DEBUG,
                             format='%(asctime)s:%(message)s')
-        
         self.client_name = client_name
         self.conn = None
         self.connected = False
@@ -47,4 +46,3 @@ class Client:
     def start_client(self, on_message):
         logging.info('[STARTING] client is starting ...')
         threading.Thread(target=self.recv_message, args=[on_message]).start()
-

@@ -3,16 +3,17 @@ import six
 
 import PySimpleGUI as sg
 
-from client import *
+from client import Client
 
 class ChatApp:
-    
+
     def __init__(self):
         self.userid_prefix = "rand"
         self.userid = self.getusername()
-        self.conn = None
         self.messages = []
         self.output = ""
+        self.window = None
+        self.conn = None
 
 
     def run(self):
@@ -21,33 +22,33 @@ class ChatApp:
         self.run_loop()
         self.close_window()
 
+
     def getusername(self):
         user_input = six.moves.input('Name: ')
         if user_input:
             return user_input
-        else:
-            return f'{self.userid_prefix}-{str(uuid.uuid4())}'
-        
+        return f'{self.userid_prefix}-{str(uuid.uuid4())}'
+
 
     def on_message(self, message):
         self.messages.append(message)
-        self.output += message + '\n'
+        self.output += f'{message}\n'
         self.window["-OUTPUT-"].update(self.output)
 
 
     def run_loop(self):
         while True:
             event, values = self.window.read()
-            if event == "Exit" or event == sg.WIN_CLOSED:
-                self.conn.disconnect()
-                break
-            elif event == "SEND":
+            if event == "SEND":
                 msg = values["-INPUT-"]
                 if msg == ':q':
                     self.conn.disconnect()
-                    break;
+                    break
                 self.conn.send_message(msg)
                 self.window["-INPUT-"].update('')
+            elif event in ('Exit', sg.WIN_CLOSED):
+                self.conn.disconnect()
+                break
 
 
     def init_connection(self):
@@ -76,7 +77,7 @@ class ChatApp:
     def close_window(self):
         self.window.close()
 
-    
+
 if __name__ == '__main__':
     app = ChatApp()
     app.run()

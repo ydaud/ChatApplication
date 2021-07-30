@@ -4,4 +4,3 @@ class ClientInfo:
         self.prefix = 'client'
         self.name = name
         self.conn = conn
-
