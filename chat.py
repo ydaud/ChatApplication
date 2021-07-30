@@ -1,16 +1,15 @@
 import uuid
-import sys
+import six
 
 import PySimpleGUI as sg
 
-from client.client import *
+from client import *
 
 class ChatApp:
     
     def __init__(self):
         self.userid_prefix = "rand"
-        self.userid = f'{self.userid_prefix}-{str(uuid.uuid4())}'
-
+        self.userid = self.getusername()
         self.conn = None
         self.messages = []
         self.output = ""
@@ -21,6 +20,13 @@ class ChatApp:
         self.init_connection()
         self.run_loop()
         self.close_window()
+
+    def getusername(self):
+        user_input = six.moves.input('Name: ')
+        if user_input:
+            return user_input
+        else:
+            return f'{self.userid_prefix}-{str(uuid.uuid4())}'
         
 
     def on_message(self, message):
@@ -45,10 +51,10 @@ class ChatApp:
 
 
     def init_connection(self):
-        self.conn = Client('hello')
+        self.conn = Client(self.userid)
         self.conn.connect()
         self.conn.start_client(self.on_message)
-        self.conn.send_message('yahya')
+        self.conn.send_message(self.userid)
 
 
     def create_window(self):

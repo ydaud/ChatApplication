@@ -5,8 +5,8 @@ import logging
 
 from PySimpleGUI.PySimpleGUI import MsgBox
 
-from defines import ADDR, HEADER, FORMAT, DISCONNECT_MESSAGE
 from client_info import ClientInfo
+from defines import ADDR, HEADER, FORMAT, DISCONNECT_MESSAGE
 
 class Server:
 
